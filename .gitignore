@@ -21,3 +21,5 @@ tests/report/
 .DS_Store
 .vscode/
 virtualenv/
+Pipfile
+Pipfile.lock

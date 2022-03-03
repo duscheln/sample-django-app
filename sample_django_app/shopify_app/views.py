@@ -93,7 +93,7 @@ def get_configured_scopes():
 def build_redirect_uri():
     app_url = apps.get_app_config("shopify_app").APP_URL
     callback_path = reverse("callback")
-    return "https://{app_url}{callback_path}".format(
+    return "{app_url}{callback_path}".format(
         app_url=app_url, callback_path=callback_path
     )
 
