@@ -49,8 +49,22 @@ def uninstall(request):
     uninstall_data = json.loads(request.body)
     shop = uninstall_data.get("domain")
     Shop.objects.filter(shopify_domain=shop).delete()
+    print('Uninstall Webhook fired')
     return HttpResponse(status=204)
 
+@csrf_exempt
+def new_order(request):
+    import paho.mqtt.client as mqtt #import the client1
+    import time
+
+    neworder_data = json.loads(request.body)
+    broker_address = apps.get_app_config("shopify_app").MQTT_SERVER
+    client = mqtt.Client("19f9ek39fn39fje83j") #create new instance
+    print(client.connect(broker_address)) #connect to broker
+    client.publish("cmnd/tasmota/Power","TOGGLE")#publish
+    time.sleep(2)
+    client.publish("cmnd/tasmota/Power","TOGGLE")#publish
+    return HttpResponse(status=204)
 
 # Login helper methods
 
@@ -165,6 +179,15 @@ def create_uninstall_webhook(shop, access_token):
         webhook = shopify.Webhook()
         webhook.topic = "app/uninstalled"
         webhook.address = "https://{host}/uninstall".format(host=app_url)
+        webhook.format = "json"
+        webhook.save()
+
+def create_new_order_webhook(shop, access_token):
+    with shopify_session(shop, access_token):
+        app_url = apps.get_app_config("shopify_app").APP_URL
+        webhook = shopify.Webhook()
+        webhook.topic = "orders/create"
+        webhook.address = "https://{host}/neworder".format(host=app_url)
         webhook.format = "json"
         webhook.save()
 

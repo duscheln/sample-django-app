@@ -9,4 +9,5 @@ class ShopifyAppConfig(AppConfig):
     SHOPIFY_API_SECRET = os.getenv('SHOPIFY_API_SECRET')
     APP_URL = os.getenv('APP_URL')
     SHOPIFY_API_VERSION = os.getenv('SHOPIFY_API_VERSION', 'unstable')
-    SHOPIFY_API_SCOPES = os.getenv('SHOPIFY_API_SCOPES', 'write_products,write_orders')
+    SHOPIFY_API_SCOPES = os.getenv('SHOPIFY_API_SCOPES', 'write_products,read_products,write_orders,read_orders')
+    MQTT_SERVER = os.getenv('MQTT_SERVER')
